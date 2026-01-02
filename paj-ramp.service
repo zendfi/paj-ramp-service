@@ -1,0 +1,27 @@
+[Unit]
+Description=PAJ Ramp Microservice
+Documentation=https://github.com/zendfi/paj-ramp-service
+After=network.target
+
+[Service]
+Type=simple
+User=zendfi
+WorkingDirectory=/opt/zendfi/paj-ramp-service
+Environment=NODE_ENV=production
+EnvironmentFile=/opt/zendfi/paj-ramp-service/.env
+ExecStart=/usr/bin/node /opt/zendfi/paj-ramp-service/index.js
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=paj-ramp
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/zendfi/paj-ramp-service
+
+[Install]
+WantedBy=multi-user.target
