@@ -34,6 +34,32 @@ console.log(`PAJ Ramp Service initialized`);
 console.log(`Environment: ${PAJ_ENVIRONMENT}`);
 console.log(`API Key: ${PAJ_API_KEY ? '***' + PAJ_API_KEY.slice(-4) : 'NOT SET'}`);
 
+app.get('/', (req, res) => {
+  res.json({
+    service: 'ZendFi\'s PAJ Ramp Service',
+    version: '1.0.0',
+    status: 'running',
+    environment: PAJ_ENVIRONMENT,
+    endpoints: {
+      health: '/health',
+      rates: '/rates',
+      session: {
+        initiate: '/session/initiate',
+        verify: '/session/verify'
+      },
+      banks: {
+        list: '/banks',
+        resolve: '/banks/resolve'
+      },
+      orders: {
+        onramp: '/orders/onramp',
+        offramp: '/orders/offramp'
+      },
+      transactions: '/transactions/:id'
+    }
+  });
+});
+
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', environment: PAJ_ENVIRONMENT });
 });
@@ -324,5 +350,5 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`PAJ Ramp Service listening on port ${PORT}`);
-  console.log(`Health check: http://localhost:${PORT}/health`);
+  console.log(`Health check: http://paj-ramp.zendfi.tech:${PORT}/health`);
 });
