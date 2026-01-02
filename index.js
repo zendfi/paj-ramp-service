@@ -15,7 +15,7 @@ import {
 } from 'paj_ramp';
 
 const app = express();
-const PORT = process.env.PAJ_SERVICE_PORT || 3001;
+const PORT = process.env.PORT || process.env.PAJ_SERVICE_PORT;
 const PAJ_API_KEY = process.env.PAJ_BUSINESS_API_KEY;
 const PAJ_ENVIRONMENT = process.env.PAJ_ENVIRONMENT || 'production';
 
