@@ -275,7 +275,7 @@ app.post('/orders/offramp', async (req, res) => {
       });
     }
     
-    const { amount, currency, bank, accountNumber, mint, webhookURL } = req.body;
+    const { amount, currency, bank, accountNumber, mint, chain, webhookURL } = req.body;
     
     if (!amount || !bank || !accountNumber || !mint) {
       return res.status(400).json({
@@ -284,12 +284,18 @@ app.post('/orders/offramp', async (req, res) => {
       });
     }
     
+    // `chain` tells PAJ which network the deposited token lives on, so it can
+    // price the right asset. It must be forwarded: without it the SDK/PAJ
+    // default to Solana and fail to price non-Solana mints (e.g. the Sui USDC
+    // coin type) with "Failed to get token price". Default to SOLANA when the
+    // caller omits it, preserving the legacy Solana-only behavior.
     const orderData = {
       amount,
       currency: currency || 'USD',
       bank,
       accountNumber,
       mint,
+      chain: chain || 'SOLANA',
       ...(webhookURL && { webhookURL })
     };
     
