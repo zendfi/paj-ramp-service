@@ -232,7 +232,11 @@ app.post('/orders/onramp', async (req, res) => {
       });
     }
     
-    const { fiatAmount, currency, recipient, mint, chain, webhookURL } = req.body;
+    const { fiatAmount, currency, recipient, mint, chain } = req.body;
+    // Accept any common casing for the webhook URL. The paj_ramp SDK expects
+    // `webhookURL`, but callers may send `webhookUrl` (camelCase) or
+    // `webhook_url` (snake_case); normalize so it is never silently dropped.
+    const webhookURL = req.body.webhookURL || req.body.webhookUrl || req.body.webhook_url;
     
     if (!fiatAmount || !recipient || !mint || !chain) {
       return res.status(400).json({
@@ -275,7 +279,9 @@ app.post('/orders/offramp', async (req, res) => {
       });
     }
     
-    const { amount, currency, bank, accountNumber, mint, chain, webhookURL } = req.body;
+    const { amount, currency, bank, accountNumber, mint, chain } = req.body;
+    // Accept any common casing for the webhook URL (see onramp handler note).
+    const webhookURL = req.body.webhookURL || req.body.webhookUrl || req.body.webhook_url;
     
     if (!amount || !bank || !accountNumber || !mint) {
       return res.status(400).json({
